@@ -11,12 +11,13 @@ export default function Output({ state }: OutputProps) {
   const [copyStatus, setCopyStatus] = useState('Copy SVG');
 
   const copyToClipboard = () => {
-    const textarea = document.getElementById('output-svg') as HTMLTextAreaElement;
-    if (textarea) {
-      textarea.select();
-      document.execCommand('copy');
-      setCopyStatus('Copied!');
-      setTimeout(() => setCopyStatus('Copy SVG'), 2000);
+    if (svgOutput) {
+      navigator.clipboard.writeText(svgOutput).then(() => {
+        setCopyStatus('Copied!');
+        setTimeout(() => setCopyStatus('Copy SVG'), 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
     }
   };
 
